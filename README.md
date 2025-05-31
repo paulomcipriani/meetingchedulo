@@ -6,7 +6,8 @@ Este é um sistema para gerenciamento de escalas com interface gráfica, permiti
 
 - Cadastro de designações (cargos/funções)
 - Cadastro de pessoas e suas designações
-- Cadastro de datas especiais (eventos, feriados, etc.)
+- Cadastro de datas especiais (assembleias, congressos, etc.)
+- Edição das pessoas cadastradas e suas designações
 - Geração automática de escala em PDF
 - Interface gráfica amigável
 - Executável standalone (não requer Python instalado)
@@ -24,21 +25,17 @@ Para uso:
 ## Instalação
 
 ### Usuários Windows (Forma mais fácil)
-1. Baixe o arquivo "Sistema de Escala.exe" da pasta dist
-2. Execute o arquivo baixado
+1. Faça o download o instalador em: 
+2. Execute o arquivo baixado e instale em sua máquina
 3. Pronto! O programa está instalado e pronto para uso
 
 ### Desenvolvedores (Para modificar o código)
 1. Clone ou baixe este repositório
 2. Instale as dependências:
+
 ```bash
 pip install -r requirements.txt
 ```
-
-## Uso
-
-### Usando o Executável (Windows)
-- Simplesmente clique duas vezes no arquivo "Sistema de Escala.exe"
 
 ### Usando o Código Fonte
 Para iniciar o programa com interface gráfica:
@@ -53,7 +50,7 @@ python escala.py
 
 ## Criando o Executável
 
-Se você fez modificações no código e precisa gerar um novo executável:
+Se você fez modificações no código e precisa gerar um novo executável ou recém baixou o código do git e quer gerar um executável:
 
 1. Instale as dependências:
 ```bash
@@ -65,16 +62,15 @@ pip install -r requirements.txt
 python build_exe.py
 ```
 
-3. O executável será criado na pasta `dist` com o nome "Sistema de Escala.exe"
+3. O executável será criado na pasta `dist` com o nome "Sistema de Escala.exe", dentro da pasta do sistema.
 
 ## Interface Gráfica
 
-A interface gráfica possui quatro abas principais:
+A interface gráfica possui três abas principais:
 
 1. **Designações**: Cadastro e gerenciamento de designações/cargos
 2. **Pessoas**: Cadastro de pessoas e suas designações
 3. **Datas Especiais**: Cadastro de eventos e datas especiais
-4. **Gerar Escala**: Geração da escala em PDF
 
 ## Arquivos
 

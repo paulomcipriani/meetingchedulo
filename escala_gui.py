@@ -403,7 +403,7 @@ class EscalaApp:
         self.cal.pack(pady=5)
         
         ttk.Label(frame_cadastro, text="Evento:").pack(pady=5)
-        self.entry_evento = ttk.Entry(frame_cadastro)
+        self.entry_evento = ttk.Entry(frame_cadastro, width=40)  # Aumentando a largura do campo
         self.entry_evento.pack(pady=5)
         # Adicionar binding para tecla Enter
         self.entry_evento.bind('<Return>', lambda e: self.adicionar_data_especial())
@@ -412,6 +412,19 @@ class EscalaApp:
                   command=self.adicionar_data_especial).pack(pady=5)
         ttk.Button(frame_cadastro, text="Remover Data Especial", 
                   command=self.remover_data_especial).pack(pady=5)
+        
+        # Adicionar separador
+        ttk.Separator(frame_cadastro, orient='horizontal').pack(fill='x', pady=20)
+        
+        # Criar frame para o botão de remover tudo
+        frame_remover_tudo = ttk.Frame(frame_cadastro)
+        frame_remover_tudo.pack(fill='x', pady=5)
+        
+        # Botão remover tudo com ícone
+        btn_remover_tudo = ttk.Button(frame_remover_tudo, 
+                                    text="🗑️ Remover Tudo", 
+                                    command=self.confirmar_remover_todas_datas)
+        btn_remover_tudo.pack()
     
     # Métodos de atualização das listas
     def atualizar_lista_designacoes(self):
@@ -552,6 +565,25 @@ class EscalaApp:
         
         # Aguardar o fechamento do diálogo
         self.root.wait_window(dialog.top)
+
+    def confirmar_remover_todas_datas(self):
+        """Abre um modal de confirmação para remover todas as datas especiais"""
+        if not escala.datas_especiais:
+            messagebox.showinfo("Informação", "Não há datas especiais cadastradas.")
+            return
+            
+        resposta = messagebox.askokcancel(
+            "Confirmação",
+            "Tem certeza que deseja remover TODAS as datas especiais?\n"
+            "Esta ação não poderá ser desfeita.",
+            icon='warning'
+        )
+        
+        if resposta:
+            escala.datas_especiais.clear()
+            escala.salvar_dados()
+            self.atualizar_todas_listas()
+            messagebox.showinfo("Sucesso", "Todas as datas especiais foram removidas.")
 
 if __name__ == '__main__':
     root = tk.Tk()
