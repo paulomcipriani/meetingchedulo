@@ -143,11 +143,19 @@ class TPLApp:
         
         # Left frame for list
         left_frame = ttk.Frame(main_frame)
-        left_frame.pack(side='left', fill='both', expand=True)
+        left_frame.pack(side='left', fill='both', expand=True, anchor='n')
         
         # Right frame for preview
         right_frame = ttk.LabelFrame(main_frame, text="Visualização")
-        right_frame.pack(side='right', fill='both', expand=True, padx=(10, 0))
+        right_frame.pack(side='right', fill='both', expand=True, padx=(10, 0), anchor='n')
+        
+        # Preview content frame to ensure top alignment
+        preview_frame = ttk.Frame(right_frame)
+        preview_frame.pack(fill='both', expand=True, anchor='n')
+        
+        # Preview content
+        self.pessoa_preview = ttk.Label(preview_frame, text="Selecione uma pessoa para visualizar", justify='left')
+        self.pessoa_preview.pack(fill='x', padx=10, pady=5, anchor='n')
         
         # Search frame
         search_frame = ttk.Frame(left_frame)
@@ -184,10 +192,6 @@ class TPLApp:
         ttk.Button(btn_frame, text="Novo", command=self.new_pessoa).pack(side='left', padx=2)
         ttk.Button(btn_frame, text="Editar", command=self.edit_pessoa).pack(side='left', padx=2)
         ttk.Button(btn_frame, text="Excluir", command=self.delete_pessoa).pack(side='left', padx=2)
-        
-        # Preview content
-        self.pessoa_preview = ttk.Label(right_frame, text="Selecione uma pessoa para visualizar")
-        self.pessoa_preview.pack(fill='both', expand=True, padx=10, pady=5)
         
         # Load initial data
         self.load_pessoas()
@@ -226,11 +230,19 @@ Horários Disponíveis:"""
         
         # Left frame for list
         left_frame = ttk.Frame(main_frame)
-        left_frame.pack(side='left', fill='both', expand=True)
+        left_frame.pack(side='left', fill='both', expand=True, anchor='n')
         
         # Right frame for preview
         right_frame = ttk.LabelFrame(main_frame, text="Visualização")
-        right_frame.pack(side='right', fill='both', expand=True, padx=(10, 0))
+        right_frame.pack(side='right', fill='both', expand=True, padx=(10, 0), anchor='n')
+        
+        # Preview content frame to ensure top alignment
+        preview_frame = ttk.Frame(right_frame)
+        preview_frame.pack(fill='both', expand=True, anchor='n')
+        
+        # Preview content
+        self.carrinho_preview = ttk.Label(preview_frame, text="Selecione um carrinho para visualizar", justify='left')
+        self.carrinho_preview.pack(fill='x', padx=10, pady=5, anchor='n')
         
         # Search frame
         search_frame = ttk.Frame(left_frame)
@@ -268,10 +280,6 @@ Horários Disponíveis:"""
         ttk.Button(btn_frame, text="Editar", command=self.edit_carrinho).pack(side='left', padx=2)
         ttk.Button(btn_frame, text="Excluir", command=self.delete_carrinho).pack(side='left', padx=2)
         
-        # Preview content
-        self.carrinho_preview = ttk.Label(right_frame, text="Selecione um carrinho para visualizar")
-        self.carrinho_preview.pack(fill='both', expand=True, padx=10, pady=5)
-        
         # Load initial data
         self.load_carrinhos()
         
@@ -305,11 +313,19 @@ Pontos Vinculados:"""
         
         # Left frame for list
         left_frame = ttk.Frame(main_frame)
-        left_frame.pack(side='left', fill='both', expand=True)
+        left_frame.pack(side='left', fill='both', expand=True, anchor='n')
         
         # Right frame for preview
         right_frame = ttk.LabelFrame(main_frame, text="Visualização")
-        right_frame.pack(side='right', fill='both', expand=True, padx=(10, 0))
+        right_frame.pack(side='right', fill='both', expand=True, padx=(10, 0), anchor='n')
+        
+        # Preview content frame to ensure top alignment
+        preview_frame = ttk.Frame(right_frame)
+        preview_frame.pack(fill='both', expand=True, anchor='n')
+        
+        # Preview content
+        self.ponto_preview = ttk.Label(preview_frame, text="Selecione um ponto para visualizar", justify='left')
+        self.ponto_preview.pack(fill='x', padx=10, pady=5, anchor='n')
         
         # Search frame
         search_frame = ttk.Frame(left_frame)
@@ -347,10 +363,6 @@ Pontos Vinculados:"""
         ttk.Button(btn_frame, text="Editar", command=self.edit_ponto).pack(side='left', padx=2)
         ttk.Button(btn_frame, text="Excluir", command=self.delete_ponto).pack(side='left', padx=2)
         
-        # Preview content
-        self.ponto_preview = ttk.Label(right_frame, text="Selecione um ponto para visualizar")
-        self.ponto_preview.pack(fill='both', expand=True, padx=10, pady=5)
-        
         # Load initial data
         self.load_pontos()
         
@@ -378,15 +390,15 @@ Horários Disponíveis:"""
     def setup_footer(self):
         """Setup the footer with generate schedule button"""
         footer_frame = ttk.Frame(self.root)
-        footer_frame.pack(fill='x', padx=10, pady=5)
+        footer_frame.pack(side='bottom', fill='x', padx=10, pady=10)
         
         generate_btn = ttk.Button(
             footer_frame,
             text="Gerar Escala",
             command=self.show_generate_dialog,
-            style='Large.TButton'
+            padding=(10, 5)  # horizontal padding of 10, vertical of 5
         )
-        generate_btn.pack(pady=10)
+        generate_btn.pack(pady=3)
         
     def load_pessoas(self):
         """Load people from JSON file"""
@@ -1032,10 +1044,14 @@ Total de pessoas: {len(self.pessoas_data)}
                     elements.append(Spacer(1, 5))
                     
                     # Create table for this day
-                    headers = ['Horário', 'Carrinho', 'Ponto', 'Pessoa 1', 'Pessoa 2']
-                    table_data = [headers] + day_data
+                    headers = ['Horário', 'Carrinho', 'Ponto', 'Designações']  # Changed header
+                    table_data = [headers]
                     
-                    # Create table
+                    # Add data rows with separate person columns
+                    for row in day_data:
+                        table_data.append([row[0], row[1], row[2], row[3], row[4]])  # Keep separate columns for data
+                    
+                    # Create table with 5 columns (even though header shows 4)
                     table = Table(table_data, colWidths=[2.5*cm, 3.5*cm, 7*cm, 3.5*cm, 3.5*cm])
                     table.setStyle(TableStyle([
                         ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#d9d9d9')),  # Header background
@@ -1051,6 +1067,8 @@ Total de pessoas: {len(self.pessoas_data)}
                         ('GRID', (0, 0), (-1, -1), 1, colors.HexColor('#999898')),  # Border color
                         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
                         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                        # Merge the last two columns in header row
+                        ('SPAN', (3, 0), (4, 0)),
                     ]))
                     
                     elements.append(table)
