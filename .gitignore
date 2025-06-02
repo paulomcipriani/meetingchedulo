@@ -108,4 +108,4 @@ cython_debug/
 .vscode/
 
 # Arquivos de escala
-escala.pdf
+*.pdf

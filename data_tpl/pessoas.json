@@ -1,0 +1,447 @@
+[
+    {
+        "nome": "Paulo",
+        "sexo": "M",
+        "has_spouse": true,
+        "horarios": {
+            "Segunda": [
+                "07:00-09:00",
+                "17:00-19:00"
+            ],
+            "Terça": [
+                "07:00-09:00"
+            ],
+            "Sábado": [
+                "07:00-09:00"
+            ],
+            "Domingo": [
+                "17:00-19:00"
+            ]
+        },
+        "spouse": "Ienizle"
+    },
+    {
+        "nome": "Ienizle",
+        "sexo": "F",
+        "has_spouse": true,
+        "horarios": {
+            "Segunda": [
+                "07:00-09:00"
+            ],
+            "Terça": [
+                "07:00-09:00",
+                "17:00-19:00"
+            ],
+            "Quarta": [
+                "07:00-09:00"
+            ],
+            "Sábado": [
+                "07:00-09:00"
+            ]
+        },
+        "spouse": "Paulo"
+    },
+    {
+        "nome": "Polyana",
+        "sexo": "F",
+        "has_spouse": true,
+        "horarios": {
+            "Terça": [
+                "17:00-19:00"
+            ],
+            "Domingo": [
+                "15:00-17:00",
+                "17:00-19:00"
+            ]
+        },
+        "spouse": "Gustavo"
+    },
+    {
+        "nome": "Gustavo",
+        "sexo": "M",
+        "has_spouse": true,
+        "horarios": {
+            "Domingo": [
+                "15:00-17:00",
+                "17:00-19:00"
+            ]
+        },
+        "spouse": "Polyana"
+    },
+    {
+        "nome": "Roveni",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Quarta": [
+                "17:00-19:00"
+            ],
+            "Sexta": [
+                "07:00-09:00"
+            ]
+        }
+    },
+    {
+        "nome": "Andressa",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Segunda": [
+                "07:00-09:00"
+            ],
+            "Quarta": [
+                "07:00-09:00"
+            ],
+            "Sexta": [
+                "07:00-09:00"
+            ]
+        }
+    },
+    {
+        "nome": "Luiz Silva",
+        "sexo": "F",
+        "has_spouse": true,
+        "horarios": {
+            "Segunda": [
+                "07:00-09:00"
+            ]
+        },
+        "spouse": "Maria Helena"
+    },
+    {
+        "nome": "Maria Helena",
+        "sexo": "F",
+        "has_spouse": true,
+        "horarios": {
+            "Segunda": [
+                "07:00-09:00"
+            ]
+        },
+        "spouse": "Luiz Silva"
+    },
+    {
+        "nome": "Andreza",
+        "sexo": "F",
+        "has_spouse": true,
+        "horarios": {
+            "Segunda": [
+                "17:00-19:00"
+            ],
+            "Quarta": [
+                "07:00-09:00"
+            ]
+        },
+        "spouse": "Vagner"
+    },
+    {
+        "nome": "Vagner",
+        "sexo": "M",
+        "has_spouse": true,
+        "horarios": {
+            "Segunda": [
+                "17:00-19:00"
+            ]
+        },
+        "spouse": "Andreza"
+    },
+    {
+        "nome": "Margarete",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Terça": [
+                "17:00-19:00"
+            ],
+            "Sexta": [
+                "09:00-11:00",
+                "11:00-13:00"
+            ]
+        }
+    },
+    {
+        "nome": "Ivani",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Terça": [
+                "17:00-19:00"
+            ]
+        }
+    },
+    {
+        "nome": "Bruno C.",
+        "sexo": "M",
+        "has_spouse": true,
+        "horarios": {
+            "Terça": [
+                "07:00-09:00"
+            ]
+        },
+        "spouse": "Viviam"
+    },
+    {
+        "nome": "Viviam",
+        "sexo": "F",
+        "has_spouse": true,
+        "horarios": {
+            "Terça": [
+                "07:00-09:00"
+            ]
+        },
+        "spouse": "Bruno C."
+    },
+    {
+        "nome": "Samira",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Terça": [
+                "17:00-19:00"
+            ]
+        }
+    },
+    {
+        "nome": "Cibele",
+        "sexo": "F",
+        "has_spouse": true,
+        "horarios": {
+            "Terça": [
+                "07:00-09:00"
+            ],
+            "Quinta": [
+                "09:00-11:00"
+            ],
+            "Sexta": [
+                "17:00-19:00"
+            ],
+            "Domingo": [
+                "09:00-11:00",
+                "11:00-13:00"
+            ]
+        },
+        "spouse": "Charles A."
+    },
+    {
+        "nome": "Charles A.",
+        "sexo": "M",
+        "has_spouse": true,
+        "horarios": {
+            "Terça": [
+                "07:00-09:00"
+            ],
+            "Quinta": [
+                "09:00-11:00"
+            ],
+            "Domingo": [
+                "09:00-11:00",
+                "11:00-13:00"
+            ]
+        },
+        "spouse": "Cibele"
+    },
+    {
+        "nome": "Suzana",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Terça": [
+                "17:00-19:00"
+            ],
+            "Sexta": [
+                "15:00-17:00",
+                "17:00-19:00"
+            ]
+        }
+    },
+    {
+        "nome": "Charlotte",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Terça": [
+                "17:00-19:00"
+            ]
+        }
+    },
+    {
+        "nome": "Jorge",
+        "sexo": "M",
+        "has_spouse": true,
+        "horarios": {
+            "Terça": [
+                "09:00-11:00"
+            ]
+        },
+        "spouse": "Tania"
+    },
+    {
+        "nome": "Tania",
+        "sexo": "F",
+        "has_spouse": true,
+        "horarios": {
+            "Terça": [
+                "09:00-11:00"
+            ]
+        },
+        "spouse": "Jorge"
+    },
+    {
+        "nome": "Suzane Katcipis",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Terça": [
+                "09:00-11:00",
+                "11:00-13:00"
+            ]
+        }
+    },
+    {
+        "nome": "Terezinha B.",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Terça": [
+                "09:00-11:00",
+                "11:00-13:00",
+                "13:00-15:00",
+                "15:00-17:00"
+            ]
+        }
+    },
+    {
+        "nome": "Daniel Lemos",
+        "sexo": "M",
+        "has_spouse": false,
+        "horarios": {
+            "Terça": [
+                "13:00-15:00",
+                "15:00-17:00"
+            ]
+        }
+    },
+    {
+        "nome": "Mauro",
+        "sexo": "M",
+        "has_spouse": true,
+        "horarios": {
+            "Quarta": [
+                "07:00-09:00"
+            ]
+        },
+        "spouse": "Dirte"
+    },
+    {
+        "nome": "Dirte",
+        "sexo": "F",
+        "has_spouse": true,
+        "horarios": {
+            "Quarta": [
+                "07:00-09:00"
+            ]
+        },
+        "spouse": "Mauro"
+    },
+    {
+        "nome": "Regina Silva",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Quarta": [
+                "07:00-09:00"
+            ]
+        }
+    },
+    {
+        "nome": "Zilda",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Quinta": [
+                "07:00-09:00"
+            ]
+        }
+    },
+    {
+        "nome": "Dira",
+        "sexo": "F",
+        "has_spouse": true,
+        "horarios": {
+            "Quinta": [
+                "09:00-11:00",
+                "11:00-13:00"
+            ],
+            "Domingo": [
+                "15:00-17:00",
+                "17:00-19:00"
+            ]
+        },
+        "spouse": "Giovane"
+    },
+    {
+        "nome": "Giovane",
+        "sexo": "M",
+        "has_spouse": true,
+        "horarios": {
+            "Domingo": [
+                "15:00-17:00",
+                "17:00-19:00"
+            ]
+        },
+        "spouse": "Dira"
+    },
+    {
+        "nome": "Jaqueline",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Quinta": [
+                "09:00-11:00",
+                "11:00-13:00"
+            ]
+        }
+    },
+    {
+        "nome": "Madalena",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Sexta": [
+                "09:00-11:00",
+                "11:00-13:00"
+            ]
+        }
+    },
+    {
+        "nome": "Cláudia Moura",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Sexta": [
+                "13:00-15:00",
+                "15:00-17:00"
+            ]
+        }
+    },
+    {
+        "nome": "Renata",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Sábado": [
+                "09:00-11:00",
+                "11:00-13:00"
+            ]
+        }
+    },
+    {
+        "nome": "Bruna",
+        "sexo": "F",
+        "has_spouse": false,
+        "horarios": {
+            "Sábado": [
+                "07:00-09:00"
+            ]
+        }
+    }
+]

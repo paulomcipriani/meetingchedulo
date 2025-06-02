@@ -18,7 +18,13 @@ build_exe_options = {
         "reportlab.graphics.barcode.ecc200datamatrix"
     ],
     "includes": ["tkinter", "tkcalendar"],
-    "include_files": ["dados_servico.json"] if "dados_servico.json" in sys.path else [],
+    "include_files": [
+        "dados_servico.json" if "dados_servico.json" in sys.path else [],
+        "data_tpl/pessoas.json" if "data_tpl/pessoas.json" in sys.path else [],
+        "data_tpl/carrinhos.json" if "data_tpl/carrinhos.json" in sys.path else [],
+        "data_tpl/pontos.json" if "data_tpl/pontos.json" in sys.path else [],
+        "data_tpl/config.json" if "data_tpl/config.json" in sys.path else []
+    ],
     "excludes": []
 }
 
@@ -27,9 +33,15 @@ if sys.platform == "win32":
     base = "Win32GUI"
 
 setup(
-    name="Sistema de Escalas",
+    name="Meeting Schedulo",
     version="1.0",
     description="Sistema modular para gerenciamento de escalas",
     options={"build_exe": build_exe_options},
-    executables=[Executable("modulo_selector.py", base=base, target_name="Sistema de Escalas.exe")]
+    executables=[
+        Executable(
+            "modulo_selector.py",
+            base=base,
+            target_name="Meeting Schedulo.exe"
+        )
+    ]
 ) 

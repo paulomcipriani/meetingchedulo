@@ -1,0 +1,25 @@
+[
+    {
+        "nome": "Casa Geovani",
+        "pontos": [
+            "Feira Trintão",
+            "Colégio Carv. até Lab. Santa Luzia",
+            "DETRAN",
+            "Parque Coqueiros"
+        ]
+    },
+    {
+        "nome": "Casa Sérgio",
+        "pontos": [
+            "Feira (Posto Policial)",
+            "Abraão",
+            "Praia da Saudade até Praia das Palmeiras"
+        ]
+    },
+    {
+        "nome": "Oficina Mecânica",
+        "pontos": [
+            "Angeloni"
+        ]
+    }
+]

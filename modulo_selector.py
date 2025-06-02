@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import escala_servico_gui
+import escala_tpl_gui
 
 class ModuloSelector:
     def __init__(self, root):
@@ -36,12 +37,12 @@ class ModuloSelector:
         )
         btn_escala.pack(fill='x', pady=5)
         
-        # Botão para Escala TPL (desabilitado)
+        # Botão para Escala TPL
         btn_tpl = ttk.Button(
             main_frame,
-            text="Escala TPL (Em desenvolvimento)",
+            text="Escala TPL",
             style='Large.TButton',
-            state='disabled'
+            command=self.abrir_escala_tpl
         )
         btn_tpl.pack(fill='x', pady=5)
 
@@ -70,6 +71,21 @@ class ModuloSelector:
         # Cria nova janela para o módulo
         modulo_window = tk.Toplevel()
         app = escala_servico_gui.EscalaApp(modulo_window)
+        
+        # Quando a janela do módulo for fechada, mostra a seleção novamente
+        def on_closing():
+            modulo_window.destroy()
+            self.root.deiconify()  # Mostra a janela de seleção novamente
+            
+        modulo_window.protocol("WM_DELETE_WINDOW", on_closing)
+        
+    def abrir_escala_tpl(self):
+        """Abre o módulo de Escala TPL"""
+        self.root.withdraw()  # Esconde a janela de seleção
+        
+        # Cria nova janela para o módulo
+        modulo_window = tk.Toplevel()
+        app = escala_tpl_gui.TPLApp(modulo_window)
         
         # Quando a janela do módulo for fechada, mostra a seleção novamente
         def on_closing():
