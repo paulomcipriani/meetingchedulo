@@ -82,6 +82,6 @@ Este módulo possui três abas principais:
 - `modulo_selector.py`: Tela inicial de seleção de módulos
 - `escala_servico_gui.py`: Interface gráfica do módulo de escala de serviço
 - `escala_servico.py`: Lógica principal do módulo de escala de serviço
-- `dados.json`: Arquivo de dados (criado automaticamente)
+- `dados_servico.json`: Arquivo de dados para escala de serviço e designações de fim de semana (criado automaticamente)
 - `build_exe.py`: Script para gerar o executável
 - `Sistema de Escalas.exe`: Executável do programa (após build) 

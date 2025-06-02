@@ -18,7 +18,7 @@ build_exe_options = {
         "reportlab.graphics.barcode.ecc200datamatrix"
     ],
     "includes": ["tkinter", "tkcalendar"],
-    "include_files": ["dados.json"] if "dados.json" in sys.path else [],
+    "include_files": ["dados_servico.json"] if "dados_servico.json" in sys.path else [],
     "excludes": []
 }
 

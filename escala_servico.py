@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 
 print("O arquivo será salvo em:", os.getcwd())
 
-ARQUIVO_DADOS = 'dados.json'
+ARQUIVO_DADOS = 'dados_servico.json'
 cargos = []
 pessoas = {}
 datas_especiais = {} 
@@ -431,7 +431,7 @@ def gerar_pdf_escala(escala, nome_arquivo='escala.pdf'):
         ('BACKGROUND', (0, 0), (-1, 0), cor_cabecalho),
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTSIZE', (0, 0), (-1, 0), 9),
+        ('FONTSIZE', (0, 0), (-1, 0), 10),
         # Ajustar padding do cabeçalho
         ('TOPPADDING', (0, 0), (-1, 0), 6),
         ('BOTTOMPADDING', (0, 0), (-1, 0), 6),
