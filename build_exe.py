@@ -1,28 +1,35 @@
-import PyInstaller.__main__
 import sys
-import os
+from cx_Freeze import setup, Executable
 
-# Adicionar PyInstaller ao path se necessário
-sys.path.append(os.path.dirname(PyInstaller.__file__))
+# Dependencies are automatically detected, but it might need fine tuning.
+build_exe_options = {
+    "packages": [
+        "tkinter", 
+        "tkcalendar",
+        "babel.numbers",
+        "babel.dates",
+        "reportlab",
+        "reportlab.graphics.barcode",
+        "reportlab.graphics.barcode.code39",
+        "reportlab.graphics.barcode.code93",
+        "reportlab.graphics.barcode.code128",
+        "reportlab.graphics.barcode.usps",
+        "reportlab.graphics.barcode.usps4s",
+        "reportlab.graphics.barcode.ecc200datamatrix"
+    ],
+    "includes": ["tkinter", "tkcalendar"],
+    "include_files": ["dados.json"] if "dados.json" in sys.path else [],
+    "excludes": []
+}
 
-# Configurar os argumentos para o PyInstaller
-args = [
-    'escala_gui.py',  # Script principal
-    '--onefile',  # Criar um único arquivo executável
-    '--noconsole',  # Não mostrar console
-    '--name=Sistema de Escala',  # Nome do executável
-    '--clean',  # Limpar cache antes de construir
-    '--add-data=dados.json;.',  # Incluir o arquivo de dados
-    '--hidden-import=babel.numbers',  # Importações necessárias
-    '--hidden-import=babel.dates',
-    '--hidden-import=reportlab.graphics.barcode',
-    '--hidden-import=reportlab.graphics.barcode.code39',
-    '--hidden-import=reportlab.graphics.barcode.code93',
-    '--hidden-import=reportlab.graphics.barcode.code128',
-    '--hidden-import=reportlab.graphics.barcode.usps',
-    '--hidden-import=reportlab.graphics.barcode.usps4s',
-    '--hidden-import=reportlab.graphics.barcode.ecc200datamatrix',
-]
+base = None
+if sys.platform == "win32":
+    base = "Win32GUI"
 
-# Executar o PyInstaller
-PyInstaller.__main__.run(args) 
+setup(
+    name="Sistema de Escalas",
+    version="1.0",
+    description="Sistema modular para gerenciamento de escalas",
+    options={"build_exe": build_exe_options},
+    executables=[Executable("modulo_selector.py", base=base, target_name="Sistema de Escalas.exe")]
+) 

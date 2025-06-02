@@ -1,16 +1,22 @@
-# Sistema de Escala
+# Sistema de Escalas
 
-Este é um sistema para gerenciamento de escalas com interface gráfica, permitindo o cadastro de designações, pessoas e datas especiais, além da geração automática de escalas em PDF.
+Este é um sistema modular para gerenciamento de diferentes tipos de escalas com interface gráfica.
 
-## Funcionalidades
+## Módulos Disponíveis
 
-- Cadastro de designações (cargos/funções)
-- Cadastro de pessoas e suas designações
-- Cadastro de datas especiais (assembleias, congressos, etc.)
-- Edição das pessoas cadastradas e suas designações
-- Geração automática de escala em PDF
-- Interface gráfica amigável
-- Executável standalone (não requer Python instalado)
+1. **Escala de Serviço e Fim de Semana**
+   - Cadastro de designações (cargos/funções)
+   - Cadastro de pessoas e suas designações
+   - Cadastro de datas especiais (assembleias, congressos, etc.)
+   - Edição das pessoas cadastradas e suas designações
+   - Geração automática de escala em PDF
+   - Interface gráfica amigável
+
+2. **Escala TPL** (Em desenvolvimento)
+   - Em breve...
+
+3. **Escala Meio de Semana** (Em desenvolvimento)
+   - Em breve...
 
 ## Requisitos
 
@@ -38,14 +44,9 @@ pip install -r requirements.txt
 ```
 
 ### Usando o Código Fonte
-Para iniciar o programa com interface gráfica:
+Para iniciar o programa:
 ```bash
-python escala_servico_gui.py
-```
-
-Para iniciar o programa em modo console:
-```bash
-python escala_servico.py
+python modulo_selector.py
 ```
 
 ## Criando o Executável
@@ -59,14 +60,18 @@ pip install -r requirements.txt
 
 2. Execute o script de build:
 ```bash
-python build_exe.py
+python build_exe.py build
 ```
 
-3. O executável será criado na pasta `dist` com o nome "Sistema de Escala.exe", dentro da pasta do sistema.
+3. O executável será criado na pasta `dist` com o nome "Sistema de Escalas.exe", dentro da pasta do sistema.
 
 ## Interface Gráfica
 
-A interface gráfica possui três abas principais:
+O sistema possui uma tela inicial de seleção de módulos, onde você pode escolher qual tipo de escala deseja gerenciar.
+
+### Módulo de Escala de Serviço e Fim de Semana
+
+Este módulo possui três abas principais:
 
 1. **Designações**: Cadastro e gerenciamento de designações/cargos
 2. **Pessoas**: Cadastro de pessoas e suas designações
@@ -74,8 +79,9 @@ A interface gráfica possui três abas principais:
 
 ## Arquivos
 
-- `escala_servico_gui.py`: Interface gráfica do sistema
-- `escala_servico.py`: Lógica principal do sistema
+- `modulo_selector.py`: Tela inicial de seleção de módulos
+- `escala_servico_gui.py`: Interface gráfica do módulo de escala de serviço
+- `escala_servico.py`: Lógica principal do módulo de escala de serviço
 - `dados.json`: Arquivo de dados (criado automaticamente)
 - `build_exe.py`: Script para gerar o executável
-- `Sistema de Escala.exe`: Executável do programa (após build) 
+- `Sistema de Escalas.exe`: Executável do programa (após build) 
