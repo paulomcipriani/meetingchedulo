@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 from tkcalendar import Calendar
-import escala
+import escala_servico
 from datetime import datetime
 import os
 import platform
@@ -85,11 +85,11 @@ class EditarPessoaDialog:
         
         # Se o nome mudou, remover o antigo e adicionar o novo
         if novo_nome != self.nome_original:
-            del escala.pessoas[self.nome_original]
+            del escala_servico.pessoas[self.nome_original]
         
         # Atualizar dados
-        escala.pessoas[novo_nome] = designacoes
-        escala.salvar_dados()
+        escala_servico.pessoas[novo_nome] = designacoes
+        escala_servico.salvar_dados()
         
         # Chamar callback de atualização
         self.callback_atualizar()
@@ -167,7 +167,7 @@ class EscalaApp:
         self.main_frame.pack(expand=True, fill='both')
         
         # Load data
-        escala.carregar_dados()
+        escala_servico.carregar_dados()
         
         # Create notebook for tabs
         self.notebook = ttk.Notebook(self.main_frame)
@@ -233,7 +233,7 @@ class EscalaApp:
                 return
             
             # Generate schedule
-            escala.gerar_escala_com_data(data_obj, semanas, caminho_completo)
+            escala_servico.gerar_escala_com_data(data_obj, semanas, caminho_completo)
             messagebox.showinfo("Sucesso", f"Escala gerada com sucesso!\nSalva em: {caminho_completo}")
             
             # Open the PDF
@@ -429,7 +429,7 @@ class EscalaApp:
     # Métodos de atualização das listas
     def atualizar_lista_designacoes(self):
         self.lista_designacoes.delete(0, tk.END)
-        for cargo in escala.cargos:
+        for cargo in escala_servico.cargos:
             self.lista_designacoes.insert(tk.END, cargo)
     
     def atualizar_lista_pessoas(self):
@@ -438,15 +438,15 @@ class EscalaApp:
             self.lista_pessoas.delete(item)
         
         # Inserir dados atualizados em ordem alfabética
-        for nome in sorted(escala.pessoas.keys()):
-            cargos = escala.pessoas[nome]
+        for nome in sorted(escala_servico.pessoas.keys()):
+            cargos = escala_servico.pessoas[nome]
             # Ordenar cargos alfabeticamente
             cargos_ordenados = sorted(cargos)
             self.lista_pessoas.insert('', 'end', values=(nome, ', '.join(cargos_ordenados)))
     
     def atualizar_lista_designacoes_selecao(self):
         self.lista_designacoes_pessoa.delete(0, tk.END)
-        for cargo in escala.cargos:
+        for cargo in escala_servico.cargos:
             self.lista_designacoes_pessoa.insert(tk.END, cargo)
     
     def atualizar_lista_datas(self):
@@ -455,15 +455,15 @@ class EscalaApp:
             self.lista_datas.delete(item)
         
         # Inserir dados atualizados
-        for data, evento in sorted(escala.datas_especiais.items()):
+        for data, evento in sorted(escala_servico.datas_especiais.items()):
             self.lista_datas.insert('', 'end', values=(data, evento))
     
     # Métodos de ação
     def adicionar_designacao(self):
         nome = self.entry_designacao.get().strip()
-        if nome and nome not in escala.cargos:
-            escala.cargos.append(nome)
-            escala.salvar_dados()
+        if nome and nome not in escala_servico.cargos:
+            escala_servico.cargos.append(nome)
+            escala_servico.salvar_dados()
             self.atualizar_todas_listas()
             self.entry_designacao.delete(0, tk.END)
         else:
@@ -472,12 +472,12 @@ class EscalaApp:
     def remover_designacao(self):
         sel = self.lista_designacoes.curselection()
         if sel:
-            cargo = escala.cargos[sel[0]]
-            escala.cargos.remove(cargo)
-            for p in list(escala.pessoas):
-                if cargo in escala.pessoas[p]:
-                    escala.pessoas[p].remove(cargo)
-            escala.salvar_dados()
+            cargo = escala_servico.cargos[sel[0]]
+            escala_servico.cargos.remove(cargo)
+            for p in list(escala_servico.pessoas):
+                if cargo in escala_servico.pessoas[p]:
+                    escala_servico.pessoas[p].remove(cargo)
+            escala_servico.salvar_dados()
             self.atualizar_todas_listas()
     
     def adicionar_pessoa(self):
@@ -485,9 +485,9 @@ class EscalaApp:
         sel = self.lista_designacoes_pessoa.curselection()
         if nome and sel:
             # Ordenar cargos alfabeticamente
-            cargos_selecionados = sorted([escala.cargos[i] for i in sel])
-            escala.pessoas[nome] = cargos_selecionados
-            escala.salvar_dados()
+            cargos_selecionados = sorted([escala_servico.cargos[i] for i in sel])
+            escala_servico.pessoas[nome] = cargos_selecionados
+            escala_servico.salvar_dados()
             self.atualizar_todas_listas()
             self.entry_nome.delete(0, tk.END)
             self.lista_designacoes_pessoa.selection_clear(0, tk.END)
@@ -500,9 +500,9 @@ class EscalaApp:
         if sel:
             item = self.lista_pessoas.item(sel[0])
             nome = item['values'][0]
-            if nome in escala.pessoas:
-                del escala.pessoas[nome]
-                escala.salvar_dados()
+            if nome in escala_servico.pessoas:
+                del escala_servico.pessoas[nome]
+                escala_servico.salvar_dados()
                 self.atualizar_todas_listas()
     
     def atualizar_designacoes_pessoa(self):
@@ -512,9 +512,9 @@ class EscalaApp:
             item = self.lista_pessoas.item(sel_pessoa[0])
             nome = item['values'][0]
             # Ordenar cargos alfabeticamente
-            cargos_selecionados = sorted([escala.cargos[i] for i in sel_designacoes])
-            escala.pessoas[nome] = cargos_selecionados
-            escala.salvar_dados()
+            cargos_selecionados = sorted([escala_servico.cargos[i] for i in sel_designacoes])
+            escala_servico.pessoas[nome] = cargos_selecionados
+            escala_servico.salvar_dados()
             self.atualizar_todas_listas()
     
     def adicionar_data_especial(self):
@@ -523,8 +523,8 @@ class EscalaApp:
         if evento:
             data_obj = datetime.strptime(data, "%d/%m/%Y")
             data_key = data_obj.strftime("%d/%m")
-            escala.datas_especiais[data_key] = evento
-            escala.salvar_dados()
+            escala_servico.datas_especiais[data_key] = evento
+            escala_servico.salvar_dados()
             self.atualizar_todas_listas()
             self.entry_evento.delete(0, tk.END)
         else:
@@ -535,9 +535,9 @@ class EscalaApp:
         if sel:
             item = self.lista_datas.item(sel[0])
             data = item['values'][0]
-            if data in escala.datas_especiais:
-                del escala.datas_especiais[data]
-                escala.salvar_dados()
+            if data in escala_servico.datas_especiais:
+                del escala_servico.datas_especiais[data]
+                escala_servico.salvar_dados()
                 self.atualizar_todas_listas()
     
     def focar_lista_designacoes(self):
@@ -552,14 +552,14 @@ class EscalaApp:
         # Obter dados da pessoa selecionada
         item = self.lista_pessoas.item(sel[0])
         nome = item['values'][0]
-        designacoes_atuais = escala.pessoas[nome]
+        designacoes_atuais = escala_servico.pessoas[nome]
         
         # Criar diálogo de edição
         dialog = EditarPessoaDialog(
             self.root,
             nome,
             designacoes_atuais,
-            escala.cargos,
+            escala_servico.cargos,
             self.atualizar_todas_listas
         )
         
@@ -568,7 +568,7 @@ class EscalaApp:
 
     def confirmar_remover_todas_datas(self):
         """Abre um modal de confirmação para remover todas as datas especiais"""
-        if not escala.datas_especiais:
+        if not escala_servico.datas_especiais:
             messagebox.showinfo("Informação", "Não há datas especiais cadastradas.")
             return
             
@@ -580,8 +580,8 @@ class EscalaApp:
         )
         
         if resposta:
-            escala.datas_especiais.clear()
-            escala.salvar_dados()
+            escala_servico.datas_especiais.clear()
+            escala_servico.salvar_dados()
             self.atualizar_todas_listas()
             messagebox.showinfo("Sucesso", "Todas as datas especiais foram removidas.")
 

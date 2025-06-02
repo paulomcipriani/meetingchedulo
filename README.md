@@ -40,12 +40,12 @@ pip install -r requirements.txt
 ### Usando o Código Fonte
 Para iniciar o programa com interface gráfica:
 ```bash
-python escala_gui.py
+python escala_servico_gui.py
 ```
 
 Para iniciar o programa em modo console:
 ```bash
-python escala.py
+python escala_servico.py
 ```
 
 ## Criando o Executável
@@ -74,8 +74,8 @@ A interface gráfica possui três abas principais:
 
 ## Arquivos
 
-- `escala_gui.py`: Interface gráfica do sistema
-- `escala.py`: Lógica principal do sistema
+- `escala_servico_gui.py`: Interface gráfica do sistema
+- `escala_servico.py`: Lógica principal do sistema
 - `dados.json`: Arquivo de dados (criado automaticamente)
 - `build_exe.py`: Script para gerar o executável
 - `Sistema de Escala.exe`: Executável do programa (após build) 
