@@ -1,5 +1,6 @@
 import sys
 from cx_Freeze import setup, Executable
+import os
 
 # Dependencies are automatically detected, but it might need fine tuning.
 build_exe_options = {
@@ -19,14 +20,17 @@ build_exe_options = {
     ],
     "includes": ["tkinter", "tkcalendar"],
     "include_files": [
-        "dados_servico.json" if "dados_servico.json" in sys.path else [],
-        "data_tpl/pessoas.json" if "data_tpl/pessoas.json" in sys.path else [],
-        "data_tpl/carrinhos.json" if "data_tpl/carrinhos.json" in sys.path else [],
-        "data_tpl/pontos.json" if "data_tpl/pontos.json" in sys.path else [],
-        "data_tpl/config.json" if "data_tpl/config.json" in sys.path else []
+        ("dados_servico.json", "dados_servico.json") if os.path.exists("dados_servico.json") else None,
+        ("data_tpl/pessoas.json", "data_tpl/pessoas.json") if os.path.exists("data_tpl/pessoas.json") else None,
+        ("data_tpl/carrinhos.json", "data_tpl/carrinhos.json") if os.path.exists("data_tpl/carrinhos.json") else None,
+        ("data_tpl/pontos.json", "data_tpl/pontos.json") if os.path.exists("data_tpl/pontos.json") else None,
+        ("data_tpl/config.json", "data_tpl/config.json") if os.path.exists("data_tpl/config.json") else None
     ],
     "excludes": []
 }
+
+# Remove None entries from include_files
+build_exe_options["include_files"] = [x for x in build_exe_options["include_files"] if x is not None]
 
 base = None
 if sys.platform == "win32":

@@ -1,9 +1,14 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
-from tkcalendar import DateEntry
+from tkcalendar import DateEntry, Calendar
 import json
 from datetime import datetime, timedelta
 import os
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, KeepTogether
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import cm
 
 class DayScheduleFrame(ttk.LabelFrame):
     def __init__(self, parent, day_name):
@@ -633,27 +638,42 @@ Horários Disponíveis:"""
         dialog.grab_set()
         
         # Center dialog
-        dialog.geometry("400x300")
-        x = self.root.winfo_x() + (self.root.winfo_width() // 2) - (400 // 2)
-        y = self.root.winfo_y() + (self.root.winfo_height() // 2) - (300 // 2)
+        dialog.geometry("320x380")  # Further reduced size
+        x = self.root.winfo_x() + (self.root.winfo_width() // 2) - (320 // 2)
+        y = self.root.winfo_y() + (self.root.winfo_height() // 2) - (380 // 2)
         dialog.geometry(f"+{x}+{y}")
         
         # Content frame
-        content = ttk.Frame(dialog, padding="20")
+        content = ttk.Frame(dialog, padding="5")
         content.pack(fill='both', expand=True)
         
         # Date selection
-        date_frame = ttk.Frame(content)
-        date_frame.pack(fill='x', pady=10)
+        date_frame = ttk.LabelFrame(content, text="Data Inicial", padding="2")
+        date_frame.pack(fill='x', pady=2)
         
-        ttk.Label(date_frame, text="Data Inicial:").pack(side='left', padx=5)
-        self.start_date = DateEntry(date_frame, width=12, background='darkblue',
-                                  foreground='white', borderwidth=2)
-        self.start_date.pack(side='left', padx=5)
+        # Create calendar directly in the dialog with reduced size
+        self.start_date = Calendar(date_frame, 
+                                 selectmode='day',
+                                 year=datetime.now().year,
+                                 month=datetime.now().month,
+                                 day=datetime.now().day,
+                                 showweeknumbers=False,
+                                 background='darkblue',
+                                 foreground='white',
+                                 selectbackground='#0074D9',
+                                 selectforeground='white',
+                                 normalbackground='white',
+                                 normalforeground='black',
+                                 weekendbackground='white',
+                                 weekendforeground='black',
+                                 othermonthbackground='gray90',
+                                 othermonthforeground='gray50',
+                                 font="Arial 8")  # Reduced font size
+        self.start_date.pack(expand=True, fill='both', padx=1, pady=1)
         
         # Weeks selection
         weeks_frame = ttk.Frame(content)
-        weeks_frame.pack(fill='x', pady=10)
+        weeks_frame.pack(fill='x', pady=2)
         
         ttk.Label(weeks_frame, text="Número de Semanas:").pack(side='left', padx=5)
         self.num_weeks = ttk.Spinbox(weeks_frame, from_=1, to=52, width=3)
@@ -661,8 +681,8 @@ Horários Disponíveis:"""
         self.num_weeks.pack(side='left', padx=5)
         
         # Summary frame
-        summary_frame = ttk.LabelFrame(content, text="Resumo", padding="10")
-        summary_frame.pack(fill='x', pady=10)
+        summary_frame = ttk.LabelFrame(content, text="Resumo", padding="5")
+        summary_frame.pack(fill='x', pady=5)
         
         # Add summary information
         summary_text = f"""
@@ -670,63 +690,39 @@ Carrinhos com pontos: {sum(1 for c in self.carrinhos_data if c.get('pontos'))}
 Total de pontos: {len(self.pontos_data)}
 Total de pessoas: {len(self.pessoas_data)}
 """
-        ttk.Label(summary_frame, text=summary_text.strip()).pack()
+        ttk.Label(summary_frame, text=summary_text.strip()).pack(pady=2)
         
         # Buttons
         btn_frame = ttk.Frame(content)
-        btn_frame.pack(fill='x', pady=20)
+        btn_frame.pack(fill='x', pady=5)
         
-        ttk.Button(btn_frame, text="Gerar",
-                  command=lambda: self.generate_schedule(dialog)).pack(side='right', padx=5)
-        ttk.Button(btn_frame, text="Cancelar",
-                  command=dialog.destroy).pack(side='right')
-        
-    def generate_schedule(self, dialog):
-        """Generate the schedule"""
-        try:
-            # Get and validate the date
-            start_date = self.start_date.get_date()
-            if not start_date:
-                messagebox.showwarning("Aviso", "Selecione uma data válida")
-                return
-                
-            # Get and validate number of weeks
-            try:
-                num_weeks = int(self.num_weeks.get())
-                if num_weeks < 1:
-                    messagebox.showwarning("Aviso", "O número de semanas deve ser maior que zero")
-                    return
-            except ValueError:
-                messagebox.showwarning("Aviso", "Número de semanas inválido")
-                return
-                
-            # Ask for save location
+        def generate():
+            selected_date = datetime.strptime(self.start_date.get_date(), "%m/%d/%y")
+            # Create default filename with date
+            default_filename = f"escala_carrinho_{selected_date.strftime('%d_%m_%Y')}.pdf"
+            
+            # Ask for save location with default name
             filename = filedialog.asksaveasfilename(
                 defaultextension=".pdf",
                 filetypes=[("PDF files", "*.pdf"), ("All files", "*.*")],
-                title="Salvar Escala"
+                title="Salvar Escala",
+                initialfile=default_filename
             )
             
-            if not filename:
-                return
-                
-            # Close the dialog
-            dialog.destroy()
-            
-            # Generate the schedule
-            try:
-                self.create_schedule_pdf(filename, start_date, num_weeks)
-                
-                # Show success message
-                messagebox.showinfo("Sucesso", "Escala gerada com sucesso!")
-                
-                # Open the generated file
-                os.startfile(filename)
-            except Exception as e:
-                messagebox.showerror("Erro", f"Erro ao gerar PDF: {str(e)}")
-        except Exception as e:
-            messagebox.showerror("Erro", f"Erro inesperado: {str(e)}")
-            
+            if filename:
+                try:
+                    self.create_schedule_pdf(filename, selected_date, int(self.num_weeks.get()))
+                    messagebox.showinfo("Sucesso", "Escala gerada com sucesso!")
+                    os.startfile(filename)
+                    dialog.destroy()
+                except Exception as e:
+                    messagebox.showerror("Erro", f"Erro ao gerar PDF: {str(e)}")
+        
+        ttk.Button(btn_frame, text="Gerar",
+                  command=generate).pack(side='right', padx=2)
+        ttk.Button(btn_frame, text="Cancelar",
+                  command=dialog.destroy).pack(side='right', padx=2)
+        
     def split_time_range(self, time_range, duration_minutes):
         """Split a time range into slots based on duration"""
         start, end = time_range.split('-')
@@ -807,13 +803,35 @@ Total de pessoas: {len(self.pessoas_data)}
         except Exception as e:
             raise ValueError(f"Invalid time range format: {str(e)}")
         
-    def create_balanced_pairs(self, people, designation_counts):
+    def is_person_available(self, person_name, date, time_slot, person_time_used):
+        """Check if person is available for the given time slot"""
+        if person_name not in person_time_used:
+            person_time_used[person_name] = {}
+        if date not in person_time_used[person_name]:
+            person_time_used[person_name][date] = []
+            
+        start_time, end_time = self.get_time_range_minutes(time_slot)
+        
+        # Check against all used time slots for this person on this date
+        for used_start, used_end in person_time_used[person_name].get(date, []):
+            if not (end_time <= used_start or start_time >= used_end):
+                return False
+                
+        return True
+        
+    def create_balanced_pairs(self, people, designation_counts, date, time_slot, person_time_used):
         """Create pairs of people following the rules and balancing designations"""
         if not people:
             return []
             
-        # Sort people by number of designations (ascending)
-        sorted_people = sorted(people, key=lambda p: designation_counts[p['nome']])
+        # Filter out people who are already designated at this time
+        available_people = [
+            p for p in people 
+            if self.is_person_available(p['nome'], date, time_slot, person_time_used)
+        ]
+            
+        # Sort available people by number of designations (ascending)
+        sorted_people = sorted(available_people, key=lambda p: designation_counts[p['nome']])
         
         pairs = []
         used = set()
@@ -863,13 +881,23 @@ Total de pessoas: {len(self.pessoas_data)}
             
         return pairs
         
+    def update_person_time_used(self, person_name, date, time_slot, person_time_used):
+        """Update the time tracking for a person"""
+        if person_name not in person_time_used:
+            person_time_used[person_name] = {}
+        if date not in person_time_used[person_name]:
+            person_time_used[person_name][date] = []
+            
+        start_time, end_time = self.get_time_range_minutes(time_slot)
+        person_time_used[person_name][date].append((start_time, end_time))
+        
     def create_schedule_pdf(self, filename, start_date, num_weeks):
         """Create the schedule PDF file"""
-        from reportlab.lib import colors
-        from reportlab.lib.pagesizes import A4, landscape
-        from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
-        from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-        from reportlab.lib.units import cm
+        # Define custom colors
+        cor_header1 = colors.HexColor('#0070c0')  # Azul
+        cor_header2 = colors.HexColor('#ffc101')  # Amarelo
+        cor_row1 = colors.HexColor('#dfeaf7')     # Azul claro
+        cor_row2 = colors.HexColor('#fef2cb')     # Amarelo claro
         
         # Validate inputs
         if not self.carrinhos_data:
@@ -883,8 +911,9 @@ Total de pessoas: {len(self.pessoas_data)}
         except FileNotFoundError:
             duration_minutes = 60
             
-        # Initialize designation counters
+        # Initialize designation counters and time tracking
         designation_counts = {pessoa['nome']: 0 for pessoa in self.pessoas_data}
+        person_time_used = {}  # Format: {person_name: {date: [(start_time, end_time)]}}
             
         # Create document
         doc = SimpleDocTemplate(filename, pagesize=landscape(A4))
@@ -990,22 +1019,42 @@ Total de pessoas: {len(self.pessoas_data)}
                                         day_name, time_slot)
                                     
                                     # Create pairs considering designation counts
-                                    pares = self.create_balanced_pairs(pessoas_disponiveis, designation_counts)
+                                    pares = self.create_balanced_pairs(
+                                        pessoas_disponiveis, 
+                                        designation_counts,
+                                        current_date,
+                                        time_slot,
+                                        person_time_used
+                                    )
                                     
                                     # If no pairs available
                                     if not pares:
                                         if pessoas_disponiveis:  # If there's one person available
-                                            # Get the person with least designations
-                                            pessoa = min(pessoas_disponiveis, 
-                                                       key=lambda p: designation_counts[p['nome']])
-                                            day_data.append([
-                                                time_slot,
-                                                cart_name,
-                                                ponto['nome'],
-                                                pessoa['nome'],
-                                                '?'
-                                            ])
-                                            designation_counts[pessoa['nome']] += 1
+                                            # Get the person with least designations who is available at this time
+                                            available_pessoas = [
+                                                p for p in pessoas_disponiveis 
+                                                if self.is_person_available(p['nome'], current_date, time_slot, person_time_used)
+                                            ]
+                                            if available_pessoas:
+                                                pessoa = min(available_pessoas, 
+                                                           key=lambda p: designation_counts[p['nome']])
+                                                day_data.append([
+                                                    time_slot,
+                                                    cart_name,
+                                                    ponto['nome'],
+                                                    pessoa['nome'],
+                                                    '?'
+                                                ])
+                                                designation_counts[pessoa['nome']] += 1
+                                                self.update_person_time_used(pessoa['nome'], current_date, time_slot, person_time_used)
+                                            else:
+                                                day_data.append([
+                                                    time_slot,
+                                                    cart_name,
+                                                    ponto['nome'],
+                                                    '-',
+                                                    '-'
+                                                ])
                                         else:  # If no one is available
                                             day_data.append([
                                                 time_slot,
@@ -1024,11 +1073,13 @@ Total de pessoas: {len(self.pessoas_data)}
                                                 pessoa1['nome'] if pessoa1 else '-',
                                                 pessoa2['nome'] if pessoa2 else '?'
                                             ])
-                                            # Update designation counts
+                                            # Update designation counts and time tracking
                                             if pessoa1:
                                                 designation_counts[pessoa1['nome']] += 1
+                                                self.update_person_time_used(pessoa1['nome'], current_date, time_slot, person_time_used)
                                             if pessoa2:
                                                 designation_counts[pessoa2['nome']] += 1
+                                                self.update_person_time_used(pessoa2['nome'], current_date, time_slot, person_time_used)
                                             
                                     # Mark this time slot as used for this cart
                                     start_time, end_time = self.get_time_range_minutes(time_slot)
@@ -1038,10 +1089,13 @@ Total de pessoas: {len(self.pessoas_data)}
                 day_data.sort(key=lambda x: (x[1], x[0]))
                 
                 if day_data:  # Only create table if there are designations for this day
+                    # Create day elements
+                    day_elements = []
+                    
                     # Add day title
                     dia_titulo = Paragraph(f"<b>{day_name} - {current_date.strftime('%d/%m/%Y')}</b>", dia_style)
-                    elements.append(dia_titulo)
-                    elements.append(Spacer(1, 5))
+                    day_elements.append(dia_titulo)
+                    day_elements.append(Spacer(1, 5))
                     
                     # Create table for this day
                     headers = ['Horário', 'Carrinho', 'Ponto', 'Designações']  # Changed header
@@ -1049,29 +1103,54 @@ Total de pessoas: {len(self.pessoas_data)}
                     
                     # Add data rows with separate person columns
                     for row in day_data:
-                        table_data.append([row[0], row[1], row[2], row[3], row[4]])  # Keep separate columns for data
+                        table_data.append([row[0], row[1], row[2], row[3], row[4]])
                     
-                    # Create table with 5 columns (even though header shows 4)
-                    table = Table(table_data, colWidths=[2.5*cm, 3.5*cm, 7*cm, 3.5*cm, 3.5*cm])
-                    table.setStyle(TableStyle([
-                        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#d9d9d9')),  # Header background
-                        ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),  # Header text color
+                    # Create table with 5 columns (even though header shows 4) and repeat header
+                    table = Table(table_data, 
+                                colWidths=[2.5*cm, 3.5*cm, 7*cm, 3.5*cm, 3.5*cm],
+                                repeatRows=1)  # Repeat the first row (header)
+                    
+                    # Determine header color based on day count (1-based index)
+                    day_count = (current_date - start_date).days + 1
+                    header_color = cor_header1 if day_count % 2 == 1 else cor_header2
+                    header_text_color = colors.white if day_count % 2 == 1 else colors.black
+                    
+                    # Initialize table style
+                    style = [
+                        # Header styling
+                        ('BACKGROUND', (0, 0), (-1, 0), header_color),
+                        ('TEXTCOLOR', (0, 0), (-1, 0), header_text_color),
                         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
                         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
                         ('FONTSIZE', (0, 0), (-1, 0), 12),
                         ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-                        ('BACKGROUND', (0, 1), (-1, -1), colors.white),
-                        ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
-                        ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
-                        ('FONTSIZE', (0, 1), (-1, -1), 10),
-                        ('GRID', (0, 0), (-1, -1), 1, colors.HexColor('#999898')),  # Border color
-                        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                        ('TOPPADDING', (0, 0), (-1, 0), 12),  # Added for vertical centering
+                        ('GRID', (0, 0), (-1, -1), 1, colors.HexColor('#999898')),
                         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
                         # Merge the last two columns in header row
                         ('SPAN', (3, 0), (4, 0)),
-                    ]))
+                    ]
                     
-                    elements.append(table)
+                    # Add row colors based on cart
+                    current_cart = None
+                    current_color = cor_row1
+                    
+                    for i, row in enumerate(table_data[1:], 1):  # Skip header row
+                        cart = row[1]  # Cart name is in second column
+                        if cart != current_cart:
+                            current_cart = cart
+                            current_color = cor_row2 if current_color == cor_row1 else cor_row1
+                        
+                        style.append(('BACKGROUND', (0, i), (-1, i), current_color))
+                        style.append(('TEXTCOLOR', (0, i), (-1, i), colors.black))
+                    
+                    table.setStyle(TableStyle(style))
+                    
+                    # Add table to day elements
+                    day_elements.append(table)
+                    
+                    # Keep all day elements together
+                    elements.append(KeepTogether(day_elements))
                 
                 current_date += timedelta(days=1)
         
